@@ -403,20 +403,12 @@
                                             <action selector="filter:" destination="qfy-y7-bfj" eventType="touchUpInside" id="G4W-2d-0ma"/>
                                         </connections>
                                     </button>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search by title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6Iv-8r-ISq">
-                                        <rect key="frame" x="70" y="5" width="324" height="34"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
                                 </subviews>
                                 <color key="backgroundColor" name="orange"/>
                                 <constraints>
-                                    <constraint firstAttribute="trailing" secondItem="6Iv-8r-ISq" secondAttribute="trailing" constant="20" id="0Bq-tW-PfJ"/>
-                                    <constraint firstItem="6Iv-8r-ISq" firstAttribute="centerY" secondItem="R4J-Kh-3Hs" secondAttribute="centerY" id="EWG-PY-5ke"/>
                                     <constraint firstItem="pSk-ne-GDv" firstAttribute="centerY" secondItem="R4J-Kh-3Hs" secondAttribute="centerY" id="PJf-7a-285"/>
                                     <constraint firstAttribute="height" constant="44" id="SeI-Q4-Lg9"/>
                                     <constraint firstItem="pSk-ne-GDv" firstAttribute="leading" secondItem="R4J-Kh-3Hs" secondAttribute="leading" constant="20" id="pAW-03-ALo"/>
-                                    <constraint firstItem="6Iv-8r-ISq" firstAttribute="leading" secondItem="pSk-ne-GDv" secondAttribute="trailing" constant="20" id="yI4-9e-ETp"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -442,6 +434,7 @@
                         <outlet property="filterFavoritesButton" destination="eAX-kp-fPS" id="4mv-gl-Osn"/>
                         <outlet property="filterOptionsView" destination="855-fx-zuD" id="poZ-T2-grX"/>
                         <outlet property="filterView" destination="Awi-ag-ofg" id="2KQ-Xt-hNe"/>
+                        <outlet property="header" destination="R4J-Kh-3Hs" id="asi-v7-AJ3"/>
                         <outlet property="isFiltering" destination="Pkd-a0-JmW" id="7x2-lS-TAP"/>
                         <outlet property="notFiltering" destination="wfi-NZ-b3B" id="SE4-cX-oGU"/>
                         <outlet property="tableView" destination="WrK-Ns-eHl" id="M6I-nu-pOy"/>

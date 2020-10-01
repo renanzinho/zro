@@ -12,5 +12,5 @@ struct SigninError: Codable {
 
     var code: String
     var message: String
-    
+
 }

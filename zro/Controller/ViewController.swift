@@ -12,7 +12,7 @@ import Alamofire
 class ViewController: UIViewController {
 
     @IBOutlet weak var errorLabel: UILabel!
-    
+
     @IBOutlet weak var email: TextFieldView!
     @IBOutlet weak var password: TextFieldView!
     @IBOutlet weak var registerButton: UIButton!
@@ -72,7 +72,7 @@ class ViewController: UIViewController {
                                                     else { return }
 
                                                 self.showError(message: error.message)
-                                                
+
                                                 break
 
                                             case 200:

@@ -9,7 +9,7 @@
 import UIKit
 
 class RegisterViewController: UIViewController {
-    
+
     @IBOutlet weak var name: TextFieldView!
     @IBOutlet weak var email: TextFieldView!
     @IBOutlet weak var password: TextFieldView!
@@ -23,7 +23,7 @@ class RegisterViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.textFields = [name, email, password, confirmPassword]
 
         let tap = UITapGestureRecognizer(target: self, action: #selector(outOfKeyboard))

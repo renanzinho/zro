@@ -59,7 +59,7 @@ class NewsCell: UITableViewCell {
         } else {
             CoreDataService.shared.insertUrl(news.url)
         }
-        
+
         NotificationCenter.default.post(name: NSNotification.Name("reloadData"), object: nil)
     }
 }

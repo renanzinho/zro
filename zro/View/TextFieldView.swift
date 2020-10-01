@@ -18,7 +18,7 @@ class TextFieldView: UIView {
         self.setup()
     }
 
-    override required init?(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.setup()
     }

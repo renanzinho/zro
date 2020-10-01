@@ -11,6 +11,7 @@ import Alamofire
 
 class FeedViewController: UIViewController {
 
+    @IBOutlet weak var header: UIView!
     @IBOutlet weak var filterDate: UITextField!
     @IBOutlet weak var filterFavoritesButton: UIButton!
     @IBOutlet weak var filterOptionsView: UIView!
@@ -33,20 +34,67 @@ class FeedViewController: UIViewController {
     var page = 1
     var maxPages: Int = Int.max
 
-    var news: [NewsData]            = []
-    var highlightedNews: [NewsData] = []
+    var filteredNews: [NewsData]            = []
+    var news: [NewsData]                    = []
+    var filteredhighlightedNews: [NewsData] = []
+    var highlightedNews: [NewsData]         = []
 
     let datePicker = UIDatePicker()
+    let searchController = UISearchController(searchResultsController: nil)
 
     override func viewDidLoad() {
         self.setupLayout()
         self.requestNews()
         self.createDatePicker()
+//        self.createSearchController()
 
         NotificationCenter.default.addObserver(self, selector: #selector(reloadData),
                                                name: NSNotification.Name("reloadData"),
                                                object: nil)
     }
+
+//    func createSearchController() {
+//        self.searchController.searchResultsUpdater = self
+//        self.searchController.obscuresBackgroundDuringPresentation = false
+//        self.searchController.delegate = self
+//        self.searchController.searchBar.barTintColor = UIColor(named: "orange")
+//        self.searchController.searchBar.isTranslucent = false
+//        self.searchController.searchBar.searchTextField.alpha = 1
+//        self.searchController.searchBar.placeholder = "Search by title"
+//        self.header.addSubview(searchController.searchBar)
+//        self.searchController.searchBar.translatesAutoresizingMaskIntoConstraints = false
+//        self.header.addConstraints([
+//            NSLayoutConstraint(item: self.searchController.searchBar.superview,
+//                               attribute: .trailing,
+//                               relatedBy: .equal,
+//                               toItem: self.searchController.searchBar,
+//                               attribute: .trailing,
+//                               multiplier: 1,
+//                               constant: 20),
+//            NSLayoutConstraint(item: self.searchController.searchBar,
+//                               attribute: .leading,
+//                               relatedBy: .equal,
+//                               toItem: self.filterButton,
+//                               attribute: .trailing,
+//                               multiplier: 1,
+//                               constant: 20),
+//            NSLayoutConstraint(item: self.searchController.searchBar,
+//                               attribute: .centerY,
+//                               relatedBy: .equal,
+//                               toItem: self.searchController.searchBar.superview,
+//                               attribute: .centerY,
+//                               multiplier: 1,
+//                               constant: 0),
+//            NSLayoutConstraint(item: self.searchController.searchBar,
+//                               attribute: .height,
+//                               relatedBy: .equal,
+//                               toItem: nil,
+//                               attribute: .notAnAttribute,
+//                               multiplier: 1,
+//                               constant: 34)
+//
+//        ])
+//    }
 
     @IBAction func filterFavorites(_ sender: Any) {
         self.filteringFavorites = !self.filteringFavorites
@@ -65,13 +113,22 @@ class FeedViewController: UIViewController {
     }
 
     @objc
-    func reloadData() {
+    func reloadData(_ filtering: String = "") {
+
+        self.filteredhighlightedNews = self.highlightedNews
+        self.filteredNews = self.news
+
+        if filtering.count > 0 {
+            self.filteredNews = self.news.filter({ $0.title.lowercased().contains(filtering.lowercased()) })
+        }
+
         DispatchQueue.main.async {
             self.tableView.reloadData()
             if let collectionView = self.collectionView {
                 collectionView.reloadData()
             }
         }
+
     }
 
     func createDatePicker() {
@@ -138,7 +195,7 @@ class FeedViewController: UIViewController {
 
             APIFacade.shared.requestNews(page, date: date) { response in
                 switch response.result {
-                    case .failure(_):
+                    case .failure:
                         break
                     case .success(let data):
 
@@ -198,7 +255,7 @@ class FeedViewController: UIViewController {
 
 extension FeedViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return news.count + 1
+        return self.filteredNews.count + 1
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -212,7 +269,7 @@ extension FeedViewController: UITableViewDataSource {
         } else {
             // swiftlint:disable:next force_cast
             let cell = tableView.dequeueReusableCell(withIdentifier: "news") as! NewsCell
-            cell.news = news[indexPath.row - 1]
+            cell.news = self.filteredNews[indexPath.row - 1]
             cell.favorite.imageView?.contentMode = .scaleAspectFit
             return cell
         }
@@ -231,7 +288,7 @@ extension FeedViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if indexPath.row == self.news.count - 3 {
+        if indexPath.row == self.filteredNews.count - 3 {
             self.requestNews(page: self.page)
         }
     }
@@ -240,7 +297,7 @@ extension FeedViewController: UITableViewDelegate {
 extension FeedViewController: UICollectionViewDelegate {
 
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == self.highlightedNews.count - 3 {
+        if indexPath.row == self.filteredhighlightedNews.count - 3 {
             self.requestNews(page: self.page)
         }
     }
@@ -255,7 +312,7 @@ extension FeedViewController: UICollectionViewDelegateFlowLayout {
 
 extension FeedViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.highlightedNews.count
+        return self.filteredhighlightedNews.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -264,8 +321,20 @@ extension FeedViewController: UICollectionViewDataSource {
                                                       for: indexPath) as! HighlightNews
         // swiftlint:enable force_cast
 
-        cell.news = self.highlightedNews[indexPath.row]
+        cell.news = self.filteredhighlightedNews[indexPath.row]
         cell.favoriteButton.imageView?.contentMode = .scaleAspectFit
         return cell
     }
 }
+
+//extension FeedViewController: UISearchResultsUpdating {
+//    func updateSearchResults(for searchController: UISearchController) {
+//        if let searchText = searchController.searchBar.text {
+//            self.filterCurrentDataSource(searchTerm: searchText)
+//        }
+//    }
+//}
+//
+//extension FeedViewController: UISearchControllerDelegate {
+//
+//}

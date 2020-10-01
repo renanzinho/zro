@@ -43,7 +43,7 @@ class HighlightNews: UICollectionViewCell {
         super.init(frame: frame)
     }
 
-    override required init?(coder: NSCoder) {
+    required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
 
