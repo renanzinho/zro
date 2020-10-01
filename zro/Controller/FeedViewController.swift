@@ -48,7 +48,7 @@ class FeedViewController: UIViewController {
         self.createDatePicker()
 //        self.createSearchController()
 
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadData),
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadDataRequest(_:)),
                                                name: NSNotification.Name("reloadData"),
                                                object: nil)
     }
@@ -113,6 +113,12 @@ class FeedViewController: UIViewController {
     }
 
     @objc
+    func reloadDataRequest(_ notification: NSNotification) {
+
+        self.reloadData()
+
+    }
+
     func reloadData(_ filtering: String = "") {
 
         self.filteredhighlightedNews = self.highlightedNews
